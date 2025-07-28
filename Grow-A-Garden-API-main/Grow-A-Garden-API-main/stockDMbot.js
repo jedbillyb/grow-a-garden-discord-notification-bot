@@ -86,7 +86,7 @@ function getItemEmoji(itemName) {
 
 async function checkWeatherEvents() {
   try {
-    const weatherRes = await fetch('http://localhost:3000/api/GetWeather');
+    const weatherRes = await fetch('https://growagarden.gg/api/weather/stats');
     const weatherData = await weatherRes.json();
     const activeEvents = (weatherData.events || []).filter(ev => ev.isActive);
     
