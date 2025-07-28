@@ -252,7 +252,7 @@ async function checkStockAndDM() {
 client.once('ready', () => {
   console.log(`Discord bot ready as ${client.user.tag}`);
   setInterval(checkStockAndDM, 60000); // check stock every 60s
-  setInterval(checkWeatherEvents, 3000); // check weather events every 3s for faster detection
+  //setInterval(checkWeatherEvents, 3000); // check weather events every 3s for faster detection
 });
 
 client.login(BOT_TOKEN);
