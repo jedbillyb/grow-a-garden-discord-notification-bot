@@ -88,6 +88,7 @@ async function checkWeatherEvents() {
   try {
     const weatherRes = await fetch('https://api.joshlee.com/weather');
     const weatherData = await weatherRes.json();
+    console.log('Weather API Response:', JSON.stringify(weatherData, null, 2));
     const activeEvents = (weatherData.weather || []).filter(ev => ev.active);
     
     // Create set of current active event names
