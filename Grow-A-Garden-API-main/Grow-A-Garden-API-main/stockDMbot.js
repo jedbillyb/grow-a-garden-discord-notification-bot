@@ -176,54 +176,42 @@ async function checkStockAndDM() {
   try {
     const res = await fetch('http://localhost:3000/api/stock/GetStock');
     const data = await res.json();
+    const user = await client.users.fetch(USER_ID);
 
-    const now = new Date();
-    const minute = now.getMinutes();
-
-    // --- Seeds & Gear: every 5 minutes ---
-    if (minute % 5 === 0) {
-      const user = await client.users.fetch(USER_ID);
-
-      // Gears - Only target items
-      const gears = (data.gearStock || []).filter(item => 
-        item.value > 0 && targetGear.includes(item.name)
-      );
-      if (gears.length > 0) {
-        const embed = formatStockEmbed('🔧 Stock Updates - Target Gears', gears, Date.now());
-        await user.send({ embeds: [embed] });
-      }
-
-      // Seeds - Only target items
-      const seeds = (data.seedsStock || []).filter(item => 
-        item.value > 0 && targetSeeds.includes(item.name)
-      );
-      if (seeds.length > 0) {
-        const embed = formatStockEmbed('🌱 Stock Updates - Target Seeds', seeds, Date.now());
-        await user.send({ embeds: [embed] });
-      }
+    // Gears - Only target items, send immediately when detected
+    const gears = (data.gearStock || []).filter(item => 
+      item.value > 0 && targetGear.includes(item.name)
+    );
+    if (gears.length > 0) {
+      const embed = formatStockEmbed('🔧 Stock Alert - Target Gears', gears, Date.now());
+      await user.send({ embeds: [embed] });
     }
 
-    // --- Egg & Event: every hour ---
-    if (minute === 0) {
-      const user = await client.users.fetch(USER_ID);
+    // Seeds - Only target items, send immediately when detected
+    const seeds = (data.seedsStock || []).filter(item => 
+      item.value > 0 && targetSeeds.includes(item.name)
+    );
+    if (seeds.length > 0) {
+      const embed = formatStockEmbed('🌱 Stock Alert - Target Seeds', seeds, Date.now());
+      await user.send({ embeds: [embed] });
+    }
 
-      // Eggs - Only target items
-      const eggs = (data.eggStock || []).filter(item => 
-        item.value > 0 && targetEggs.includes(item.name)
-      );
-      if (eggs.length > 0) {
-        const embed = formatStockEmbed('🥚 Stock Updates - Target Eggs', eggs, Date.now());
-        await user.send({ embeds: [embed] });
-      }
+    // Eggs - Only target items, send immediately when detected
+    const eggs = (data.eggStock || []).filter(item => 
+      item.value > 0 && targetEggs.includes(item.name)
+    );
+    if (eggs.length > 0) {
+      const embed = formatStockEmbed('🥚 Stock Alert - Target Eggs', eggs, Date.now());
+      await user.send({ embeds: [embed] });
+    }
 
-      // Events - Only target items
-      const events = (data.eventStock || []).filter(item => 
-        item.value > 0 && targetEvents.includes(item.name)
-      );
-      if (events.length > 0) {
-        const embed = formatStockEmbed('🎉 Stock Updates - Target Events', events, Date.now());
-        await user.send({ embeds: [embed] });
-      }
+    // Events - Only target items, send immediately when detected
+    const events = (data.eventStock || []).filter(item => 
+      item.value > 0 && targetEvents.includes(item.name)
+    );
+    if (events.length > 0) {
+      const embed = formatStockEmbed('🎉 Stock Alert - Target Events', events, Date.now());
+      await user.send({ embeds: [embed] });
     }
   } catch (err) {
     console.error('Error checking stock for DM:', err);
