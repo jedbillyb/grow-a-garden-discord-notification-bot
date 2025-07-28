@@ -86,13 +86,12 @@ function getItemEmoji(itemName) {
 
 async function checkWeatherEvents() {
   try {
-    const weatherRes = await fetch('https://api.joshlee.com/weather');
+    const weatherRes = await fetch('https://growagarden.gg/api/weather/stats');
     const weatherData = await weatherRes.json();
-    console.log('Weather API Response:', JSON.stringify(weatherData, null, 2));
-    const activeEvents = (weatherData.weather || []).filter(ev => ev.active);
+    const activeEvents = (weatherData.events || []).filter(ev => ev.isActive);
     
     // Create set of current active event names
-    const currentActiveEvents = new Set(activeEvents.map(ev => ev.weather_id));
+    const currentActiveEvents = new Set(activeEvents.map(ev => ev.name));
     
     // Check if events have changed
     const eventsChanged = 
@@ -116,7 +115,7 @@ async function checkWeatherEvents() {
           .setTitle('🌤️ Weather Event Update!')
           .setColor(0xFFD700)
           .setDescription(activeEvents.map(ev =>
-            `${emojiMap[ev.weather_id] || '🌟'} **${ev.weather_id}** - Active now!`
+            `${emojiMap[ev.name] || '🌟'} **${ev.displayName}** - Active now!`
           ).join('\n'))
           .setTimestamp()
           .setFooter({ text: 'Grow A Garden Weather Alert' });
