@@ -212,11 +212,32 @@ async function checkStockAndDM() {
   }
 }
 
-client.once('ready', () => {
+client.once('ready', async () => {
   console.log(`Discord bot ready as ${client.user.tag}`);
+
+  // 🟢 Set bot username
+  try {
+    await client.user.setUsername('Your New Bot Name');
+    console.log('✅ Username updated!');
+  } catch (err) {
+    console.error('❌ Failed to update username:', err.message);
+  }
+
+  // (Optional) Set avatar if not already done
+  try {
+    const fs = require('fs');
+    const avatarBuffer = fs.readFileSync('./avatar.png'); // update path as needed
+    await client.user.setAvatar(avatarBuffer);
+    console.log('✅ Avatar updated!');
+  } catch (err) {
+    console.error('❌ Failed to update avatar:', err.message);
+  }
+
+  // Continue running bot functions
   setInterval(checkStockAndDM, 60000); // check stock every 60s
-  //setInterval(checkWeatherEvents, 3000); // check weather events every 3s for faster detection
+  promptMessage(); // start terminal prompt
 });
+
 
 client.login(BOT_TOKEN);
 
