@@ -217,21 +217,12 @@ client.once('ready', async () => {
 
   // 🟢 Set bot username
   try {
-    await client.user.setUsername('Your New Bot Name');
+    await client.user.setUsername('✧ GrowGuardian ✧');
     console.log('✅ Username updated!');
   } catch (err) {
     console.error('❌ Failed to update username:', err.message);
   }
 
-  // (Optional) Set avatar if not already done
-  try {
-    const fs = require('fs');
-    const avatarBuffer = fs.readFileSync('./avatar.png'); // update path as needed
-    await client.user.setAvatar(avatarBuffer);
-    console.log('✅ Avatar updated!');
-  } catch (err) {
-    console.error('❌ Failed to update avatar:', err.message);
-  }
 
   // Continue running bot functions
   setInterval(checkStockAndDM, 60000); // check stock every 60s
