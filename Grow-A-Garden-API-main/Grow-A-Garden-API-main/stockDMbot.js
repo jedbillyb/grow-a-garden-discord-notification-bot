@@ -1,20 +1,23 @@
-// 📦 GrowGuardian Bot - Full Version with DM Controls and Stock Alerts
+// Grow a Garden Discord Bot aka "GrowGuardian Bot" - Full Version with DM Controls and Stock Alerts
 
 const { Client, GatewayIntentBits, EmbedBuilder } = require('discord.js');
 const chalk = require('chalk');
 const fetch = (...args) => import('node-fetch').then(mod => mod.default(...args));
 const readline = require('readline');
 
+// Bot Token
 const BOT_TOKEN = 'MTM5OTE2NDg3Mjc0MjE0MTk3Mg.GhAS6C.-yuxATnuxTQa4Nggk19Bqm3M9uBM23ERtEq348';
+// Bot User ID
 const USER_IDS = [
-  '1162693800590848030',
-  '1085337880022483014',
-  '1358644289198100611',
-  '838205645307248671',
-  '869152480724938793',
-  '1283307434579988596'
+  '1162693800590848030', // User  ID 1
+  '1085337880022483014', // User ID 2
+  '1358644289198100611', // User ID 3
+  '838205645307248671', // User ID 4
+  '869152480724938793', // User ID 5
+  '1283307434579988596' // User ID 6
 ];
 
+// Discord Client
 const client = new Client({
   intents: [
     GatewayIntentBits.DirectMessages,
@@ -91,6 +94,7 @@ function formatStockEmbed(title, items, stockId) {
   return embed;
 }
 
+// Function to check if stock has changed
 function hasStockChanged(currentItems, lastMap) {
   const newItems = [];
   for (const item of currentItems) {
@@ -104,18 +108,20 @@ function hasStockChanged(currentItems, lastMap) {
   return newItems;
 }
 
+// Function to send DMs to all users
 async function sendToUsers(embed) {
   for (const id of USER_IDS) {
     try {
       const user = await client.users.fetch(id);
       await user.send({ embeds: [embed] });
-      console.log(chalk.green(`✅ Sent DM to ${user.username}`));
+      console.log(chalk.green(` Sent DM to ${user.username}`));
     } catch (e) {
-      console.log(chalk.red(`❌ Could not DM ${id}: ${e.message}`));
+      console.log(chalk.red(`Could not DM ${id}: ${e.message}`));
     }
   }
 }
 
+// Define function to check stock and send DMs
 async function checkStockAndDM() {
   try {
     const res = await fetch('http://localhost:3000/api/stock/GetStock');
@@ -131,16 +137,17 @@ async function checkStockAndDM() {
     const newEggs = hasStockChanged(eggs, lastStockState.eggs);
     const newEvents = hasStockChanged(events, lastStockState.events);
 
-    if (newGears.length) await sendToUsers(formatStockEmbed('🔧 Stock Alert - Target Gears', newGears, Date.now()));
-    if (newSeeds.length) await sendToUsers(formatStockEmbed('🌱 Stock Alert - Target Seeds', newSeeds, Date.now()));
-    if (newEggs.length) await sendToUsers(formatStockEmbed('🥚 Stock Alert - Target Eggs', newEggs, Date.now()));
-    if (newEvents.length) await sendToUsers(formatStockEmbed('🎉 Stock Alert - Target Events', newEvents, Date.now()));
+    if (newGears.length) await sendToUsers(formatStockEmbed(' Stock Alert - Target Gears', newGears, Date.now()));
+    if (newSeeds.length) await sendToUsers(formatStockEmbed(' Stock Alert - Target Seeds', newSeeds, Date.now()));
+    if (newEggs.length) await sendToUsers(formatStockEmbed(' Stock Alert - Target Eggs', newEggs, Date.now()));
+    if (newEvents.length) await sendToUsers(formatStockEmbed(' Stock Alert - Target Events', newEvents, Date.now()));
 
   } catch (err) {
     console.error(chalk.red('Error checking stock:'), err);
   }
 }
 
+// Handle incoming DMs
 client.on('messageCreate', async (message) => {
   // Ignore bots (including yourself)
   if (message.author.bot) return;
@@ -151,7 +158,7 @@ client.on('messageCreate', async (message) => {
   // Handle DMs (type 1)
   if (message.channel.type === 1) {
     const timestamp = new Date().toLocaleTimeString();
-    const logMessage = `[${timestamp}] 💌 DM from ${message.author.tag}: ${message.content}`;
+    const logMessage = `[${timestamp}] DM from ${message.author.tag}: ${message.content}`;
     
     // Clear current line and log the DM
     readline.cursorTo(process.stdout, 0);
@@ -159,7 +166,7 @@ client.on('messageCreate', async (message) => {
     console.log(chalk.yellow(logMessage));
     
     // Optional: Auto-reply for testing
-    await message.reply("🤖 I received your message: _" + message.content + "_");
+    await message.reply("I received your message: _" + message.content + "_");
 
     // Redraw the prompt
     promptMessage();
@@ -168,12 +175,12 @@ client.on('messageCreate', async (message) => {
 
 
 client.once('ready', async () => {
-  console.log(chalk.green(`✅ Logged in as ${client.user.tag}`));
+  console.log(chalk.green(` Logged in as ${client.user.tag}`));
   try {
     await client.user.setUsername('✧ GrowGuardian ✧');
-    console.log(chalk.blue('✏️  Username updated!'));
+    console.log(chalk.blue('Username updated!'));
   } catch (err) {
-    console.error(chalk.red('❌ Failed to update username:'), err.message);
+    console.error(chalk.red('Failed to update username:'), err.message);
   }
 
   for (const id of USER_IDS) {
@@ -198,7 +205,7 @@ function promptMessage() {
   readline.cursorTo(process.stdout, 0);
   readline.clearLine(process.stdout, 0);
   
-  console.log(chalk.magenta('\n💬 Who would you like to message?'));
+  console.log(chalk.magenta('\n Who would you like to message?'));
   console.log(chalk.cyan('0.') + ' Broadcast to everyone');
   USER_IDS.forEach((id, i) => {
     console.log(chalk.cyan(`${i + 1}.`) + ` ${USER_MAP.get(id)} (${id})`);
@@ -212,7 +219,7 @@ function promptMessage() {
 
     const index = parseInt(input);
     if (isNaN(index) || index < 0 || index > USER_IDS.length) {
-      console.log(chalk.red('❌ Invalid selection.'));
+      console.log(chalk.red('Invalid selection.'));
       return promptMessage();
     }
 
@@ -223,9 +230,9 @@ function promptMessage() {
         try {
           const user = await client.users.fetch(id);
           await user.send(message);
-          console.log(chalk.green(`✅ Sent to ${user.username}`));
+          console.log(chalk.green(`Sent to ${user.username}`));
         } catch (err) {
-          console.log(chalk.red(`❌ Failed to send to ${id}: ${err.message}`));
+          console.log(chalk.red(`Failed to send to ${id}: ${err.message}`));
         }
       }
       promptMessage();

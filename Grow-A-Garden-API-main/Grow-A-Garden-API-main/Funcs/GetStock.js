@@ -43,6 +43,7 @@ function fetchStocks() {
     });
 }
 
+// Function to format stock items
 function formatStockItems(items, imageData) {
     if (!Array.isArray(items) || items.length === 0) return [];
 
@@ -56,6 +57,7 @@ function formatStockItems(items, imageData) {
     });
 }
 
+// Function to format stock embeding
 function formatLastSeenItems(items, imageData) {
     if (!Array.isArray(items) || items.length === 0) return [];
 
@@ -70,6 +72,7 @@ function formatLastSeenItems(items, imageData) {
     });
 }
 
+// Function to format stock embed
 function formatStocks(stocks) {
     const imageData = stocks.imageData || {};
 
@@ -85,6 +88,7 @@ function formatStocks(stocks) {
     };
 }
 
+// Function to format stock embeding
 async function FetchStockData() {
     try {
         const data = await fetchStocks();
@@ -95,6 +99,7 @@ async function FetchStockData() {
     }
 }
 
+// Function to register the API endpoint
 function register(app) {
     app.get('/api/stock/GetStock', async (req, res) => {
         try {
