@@ -1,3 +1,4 @@
+<a href="https://jedbillyb.com"><img align="right" src="https://img.shields.io/badge/jedbillyb.com-000?style=for-the-badge&logo=archlinux&logoColor=blue" /></a>
 # Grow a Garden Bot 
 Grow a Garden Roblox Stock Monitor + Discord Alert Bot
 
